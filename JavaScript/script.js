@@ -3,12 +3,12 @@ const stations = [
     { 
         name: "Lofi Hip Hop Radio", 
         url: "https://stream.zeno.fm/f3wvbbqmdg8uv", 
-        info: "Beats para estudiar y relajarse",
+      info: "Beats para estudiar y relajarse",
         image: "IMG/lofi.jpg"
     },
     { 
         name: "Jazz Suave", 
-        url: "https://stream.zeno.fm/n95whvdrf3quv", // Jazz 24/7
+        url: "http://stream.chilltrax.com/chilltrax.mp3", // Jazz 24/7
         info: "Jazz instrumental relajante",
         image: "IMG/jazz.jpg"
     },
