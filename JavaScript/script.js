@@ -4,25 +4,25 @@ const stations = [
         name: "Lofi Hip Hop Radio", 
         url: "https://stream.zeno.fm/f3wvbbqmdg8uv", 
         info: "Beats para estudiar y relajarse",
-        image: "../IMG/lofi.jpg"
+        image: "IMG/lofi.jpg"
     },
     { 
         name: "Jazz Suave", 
         url: "https://stream.zeno.fm/n95whvdrf3quv", // Jazz 24/7
         info: "Jazz instrumental relajante",
-        image: "../IMG/jazz.jpg"
+        image: "IMG/jazz.jpg"
     },
     { 
         name: "Ambient Chill", 
         url: "https://stream.zeno.fm/0r0xa792kwzuv",
         info: "Sonidos atmosféricos",
-        image: "../IMG/ambient.jpg"
+        image: "IMG/ambient.jpg"
     },
     { 
         name: "Bossa Nova", 
         url: "https://stream.zeno.fm/kbzr8vqrf3quv", // Bossa Nova Radio
         info: "Ritmos brasileños suaves",
-        image: "../IMG/bossa.jpg"
+        image: "IMG/bossa.jpg"
     }
 ];
 
