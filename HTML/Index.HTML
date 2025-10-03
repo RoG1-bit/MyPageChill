@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chill_Player</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        
+    </div>
+
+    <div class="container">
+        <h1>Chill Player</h1>
+       
+
+        <div class="now-playing">
+            <div class="station-name" id="station-name"><span id="station-name-text">Selecciona una estacion</span><span id="station-status" style="margin-left:10px"></span></div>
+            <div class="song-info" id="song-info">Presiona play para escuchar</div>
+            <div class="album-cover">
+                <img id="station-image" src="../IMG/lofi.jpg" alt="Station Cover" onerror="this.style.display='none'; document.getElementById('img-error').style.display='block';">
+                <div id="img-error" style="display:none; color:#fff; background:#c00; padding:8px; border-radius:8px; margin-top:10px; text-align:center; font-size:0.9em;">Imagen no encontrada</div>
+            </div>
+        </div>
+
+    <div class="visualizer" id="visualizer">
+   
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn">⏮️</button>
+        <button id="playBtn">▶️</button>
+        <button id="nextBtn">⏭️</button>
+    </div>
+    
+    <div class="volume-control">
+        <div class="volume-label">
+            <span>🔈 volumen</span>
+            <span id="volumeValue">30%</span>
+        </div>
+        <input type="range" id="volumeSlider" min="0" max="100" value="30">
+    </div>
+
+    <div class="station">
+        <button class="station-btn" data-station="0">🎧  Lofi hip hop</button>
+        <button class="station-btn" data-station="1">🎷 Jazz Suave</button>
+        <button class="station-btn" data-station="2">🌊 Ambient Chill</button>
+        <button class="station-btn" data-station="3">🌸 Bossa Nova</button>
+    </div>
+    <audio id="audioPlayer"></audio>
+    <script src="../JavaScript/script.js"></script>
+    </div>
+</body>
+</html>
