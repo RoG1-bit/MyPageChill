@@ -35,8 +35,8 @@ const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
-const stationName = document.getElementById('stationName');
-const songInfo = document.getElementById('songInfo');
+const stationName = document.getElementById('station-name');
+const songInfo = document.getElementById('song-info');
 const stationBtns = document.querySelectorAll('.station-btn');
 const bars = document.querySelectorAll('.bar');
 
@@ -89,16 +89,21 @@ function loadStation(index) {
         btn.classList.toggle('active', i === index);
     });
 
-    audio.play().then(() => {
-        isPlaying = true;
-        playBtn.textContent = '⏸️';
-        setStationStatus('playing');
-    }).catch((error) => {
-        console.log('Error al reproducir:', error);
-        setStationStatus('');
-        isPlaying = false;
-        playBtn.textContent = '▶️';
-    });
+    // Intentar reproducir después de un pequeño delay para asegurar que el stream esté listo
+    setTimeout(() => {
+        audio.play().then(() => {
+            isPlaying = true;
+            playBtn.textContent = '⏸️';
+            setStationStatus('playing');
+        }).catch((error) => {
+            console.log('Error al reproducir:', error);
+            setStationStatus('');
+            isPlaying = false;
+            playBtn.textContent = '▶️';
+            // Mostrar mensaje al usuario
+            alert('No se pudo reproducir esta estación. Intenta con otra o verifica tu conexión.');
+        });
+    }, 100);
 }
 
 // Eventos de audio para cambiar estado de la estación
@@ -163,3 +168,28 @@ function animateVisualizer() {
 }
 
 setInterval(animateVisualizer, 200);
+
+// Inicializar la primera estación al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    // Cargar estación inicial sin reproducir automáticamente
+    const stationNameText = document.getElementById('station-name-text');
+    if (stationNameText) {
+        stationNameText.textContent = stations[0].name;
+    }
+    const songInfo = document.getElementById('song-info');
+    if (songInfo) {
+        songInfo.textContent = stations[0].info;
+    }
+    
+    // Configurar imagen inicial
+    const stationImage = document.getElementById('station-image');
+    if (stationImage) {
+        stationImage.src = stations[0].image;
+        stationImage.alt = stations[0].name;
+    }
+    
+    // Marcar primer botón como activo
+    if (stationBtns.length > 0) {
+        stationBtns[0].classList.add('active');
+    }
+});
