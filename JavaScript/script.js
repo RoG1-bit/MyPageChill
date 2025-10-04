@@ -37,8 +37,15 @@ let spotifyToken = null;
 
 // Función para obtener token de Spotify
 function getSpotifyToken() {
+    console.log('Iniciando autenticación con Spotify...');
+    console.log('Client ID:', CLIENT_ID);
+    console.log('Redirect URI:', REDIRECT_URI);
+    
     const scopes = 'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state';
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
+    
+    console.log('URL de autenticación:', authUrl);
+    alert('Te redirigiremos a Spotify para autorizar la app');
     window.location.href = authUrl;
 }
 
@@ -53,14 +60,21 @@ function extractTokenFromURL() {
 function initSpotifyPlayer() {
     const token = extractTokenFromURL() || localStorage.getItem('spotify_token');
     if (!token) {
-        console.log('No hay token, redirigiendo a autenticación...');
+        console.log('No hay token, necesitas autenticarte');
         return;
     }
     
+    console.log('Token encontrado, inicializando player...');
     spotifyToken = token;
     localStorage.setItem('spotify_token', token);
     
+    // Limpiar URL
+    if (window.location.hash) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
     window.onSpotifyWebPlaybackSDKReady = () => {
+        console.log('SDK de Spotify cargado');
         spotifyPlayer = new Spotify.Player({
             name: 'Chill Player',
             getOAuthToken: cb => { cb(token); },
@@ -68,11 +82,26 @@ function initSpotifyPlayer() {
         });
 
         spotifyPlayer.addListener('ready', ({ device_id }) => {
-            console.log('Spotify Player listo con Device ID', device_id);
+            console.log('✅ Spotify Player listo con Device ID:', device_id);
+            document.getElementById('spotify-login').style.display = 'none';
+            alert('¡Conectado a Spotify! Ya puedes reproducir música.');
         });
 
-        spotifyPlayer.connect();
+        spotifyPlayer.addListener('not_ready', ({ device_id }) => {
+            console.log('Device ID has gone offline', device_id);
+        });
+
+        spotifyPlayer.connect().then(success => {
+            if (success) {
+                console.log('¡Conectado exitosamente a Spotify!');
+            }
+        });
     };
+    
+    // Si el SDK ya está cargado
+    if (window.Spotify) {
+        window.onSpotifyWebPlaybackSDKReady();
+    }
 }
 
 const audio = document.getElementById('audioPlayer');
