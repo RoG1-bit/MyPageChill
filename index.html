@@ -1,54 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chill_Player</title>
+    <title>MiPlayer - Radio + YouTube</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    
-    <div class="container">
-        <h1>Chill Player</h1>
-
-        <div class="now-playing">
-            <div class="station-name" id="station-name"><span id="station-name-text">Selecciona una estacion</span><span id="station-status" style="margin-left:10px"></span></div>
-            <div class="song-info" id="song-info">Presiona play para escuchar</div>
-            <div class="album-cover">
-                <img id="station-image" src="IMG/lofi.jpg" alt="Station Cover" onerror="this.style.display='none'; document.getElementById('img-error').style.display='block';">
-                <div id="img-error" style="display:none; color:#fff; background:#c00; padding:8px; border-radius:8px; margin-top:10px; text-align:center; font-size:0.9em;">Imagen no encontrada</div>
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">🎵 MiPlayer</div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Navegar</div>
+                <div class="nav-item active" data-section="radio">
+                    <span>📻</span> Radios en Vivo
+                </div>
+                <div class="nav-item" data-section="youtube">
+                    <span>🎵</span> Buscar Música
+                </div>
+                <div class="nav-item" data-section="playlists">
+                    <span>📝</span> Mis Playlists
+                </div>
             </div>
-        </div>
 
-    <div class="controls">
-        <button id="prevBtn">⏮️</button>
-        <button id="playBtn">▶️</button>
-        <button id="nextBtn">⏭️</button>
-    </div>
-    
-    <div class="spotify-login" id="spotify-login" style="text-align:center; margin:20px 0;">
-        <button id="loginBtn" style="background:#1DB954; color:white; border:none; padding:12px 24px; border-radius:20px; font-weight:bold; cursor:pointer;">
-            🎵 Conectar con Spotify
-        </button>
-    </div>
-    
-    <div class="volume-control">
-        <div class="volume-label">
-            <span>🔈 volumen</span>
-            <span id="volumeValue">30%</span>
-        </div>
-        <input type="range" id="volumeSlider" min="0" max="100" value="30">
+            <div class="nav-section">
+                <div class="nav-title">Estaciones Favoritas</div>
+                <div class="nav-item">
+                    <span>🎧</span> Lofi Hip Hop
+                </div>
+                <div class="nav-item">
+                    <span>🎷</span> Jazz Suave
+                </div>
+                <div class="nav-item">
+                    <span>🌊</span> Ambient Chill
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- RADIO SECTION -->
+            <div class="content-section active" id="radio-section">
+                <h1 class="section-title">📻 Radios en Vivo</h1>
+                <div class="radio-grid" id="radioGrid"></div>
+            </div>
+
+            <!-- YOUTUBE SECTION -->
+            <div class="content-section" id="youtube-section">
+                <h1 class="section-title">🎵 Buscar Música en YouTube</h1>
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" id="searchInput" placeholder="Buscar canciones, artistas, álbumes...">
+                </div>
+                <div id="youtubeResults">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎵</div>
+                        <div class="empty-state-text">Busca tu música favorita</div>
+                        <div class="empty-state-subtext">Escribe el nombre de una canción o artista arriba</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLAYLISTS SECTION -->
+            <div class="content-section" id="playlists-section">
+                <h1 class="section-title">📝 Mis Playlists</h1>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <div class="empty-state-text">Aún no tienes playlists</div>
+                    <div class="empty-state-subtext">Crea tu primera playlist y guarda tus canciones favoritas</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- PLAYER BAR -->
+        <footer class="player-bar">
+            <div class="track-info">
+                <div class="track-cover" id="trackCover">🎵</div>
+                <div class="track-details">
+                    <div class="track-name" id="trackName">Selecciona algo para reproducir</div>
+                    <div class="track-artist" id="trackArtist">Radio o YouTube</div>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <div class="control-buttons">
+                    <button class="control-btn" id="prevBtn">⏮️</button>
+                    <button class="control-btn play-btn" id="playBtn">▶️</button>
+                    <button class="control-btn" id="nextBtn">⏭️</button>
+                </div>
+                <div class="progress-bar">
+                    <span id="currentTime">0:00</span>
+                    <div class="progress-slider" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+
+            <div class="volume-control">
+                <button class="control-btn" id="volumeBtn">🔊</button>
+                <div class="volume-slider" id="volumeBar">
+                    <div class="volume-fill" id="volumeFill"></div>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <div class="station">
-        <button class="station-btn" data-station="0">🎧  Lofi hip hops</button>
-        <button class="station-btn" data-station="1">� Reggaeton 24/7</button>
-        <button class="station-btn" data-station="2">🌊 Ambient Chill</button>
-        <button class="station-btn" data-station="3">💃 Salsa 24/7</button>
-    </div>
-    <audio id="audioPlayer"></audio>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script src="JavaScript/script.js"></script>
-    </div>
+    <!-- Audio element para radios -->
+    <audio id="radioPlayer"></audio>
+    
+    <!-- YouTube Player (invisible) -->
+    <div id="ytplayer"></div>
+
+    <script src="/JavaScript/script.js"></script>
 </body>
 </html>
