@@ -12,51 +12,9 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
-    overflow: hidden;
-}
-
-/* Efecto de ondas animadas en el fondo */
-.background-animation {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    opacity: 0.3;
-}
-
-.wave {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: wave-animation 8s infinite ease-in-out;
-}
-
-.wave:nth-child(2) {
-    animation-delay: 2s;
-    opacity: 0.5;
-}
-
-.wave:nth-child(3) {
-    animation-delay: 4s;
-    opacity: 0.3;
-}
-
-@keyframes wave-animation {
-    0%, 100% {
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.2);
-    }
 }
 
 .container {
-    position: relative;
-    z-index: 1;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 30px;
@@ -96,22 +54,6 @@ h1 {
 .song-info {
     font-size: 0.9em;
     opacity: 0.7;
-}
-
-.visualizer {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 4px;
-    height: 60px;
-    margin: 20px 0;
-}
-
-.bar {
-    width: 8px;
-    background: linear-gradient(to top, #fff, #a8edea);
-    border-radius: 4px;
-    transition: height 0.1s ease;
 }
 
 .controls {
@@ -190,7 +132,7 @@ input[type="range"]::-moz-range-thumb {
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-.stations {
+.station {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;

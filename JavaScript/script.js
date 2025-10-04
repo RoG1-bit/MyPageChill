@@ -1,33 +1,79 @@
-// Aquí irían las URLs reales de streams de radio
+// Configuración de Spotify
+const CLIENT_ID = 'f5f5cb557b984669984c4b62e32e2257'; // Tu Client ID de Spotify
+const REDIRECT_URI = 'https://rog1-bit.github.io/MyPageChill/'; // Tu URL de GitHub Pages
+
+// Playlists de Spotify (usando URIs públicas)
 const stations = [
     { 
-        name: "Lofi Hip Hop Radio", 
-        url: "https://stream.zeno.fm/f3wvbbqmdg8uv", 
+        name: "Lofi Hip Hop", 
+        playlistId: "37i9dQZF1DX0XUsuxWHRQd", // Playlist pública de Spotify
         info: "Beats para estudiar y relajarse",
         image: "IMG/lofi.jpg"
     },
     { 
-        name: "Jazz Suave", 
-        url: "https://stream.zeno.fm/n95whvdrf3quv", // Jazz 24/7
-        info: "Jazz instrumental relajante",
-        image: "IMG/jazz.jpg"
+        name: "Reggaeton Hits", 
+        playlistId: "37i9dQZF1DX0XUfTFmNBRM", // Playlist de reggaeton de Spotify
+        info: "Los mejores hits de reggaeton",
+        image: "IMG/reggaeton.jpg"
     },
     { 
-        name: "Ambient Chill", 
-        url: "https://stream.zeno.fm/0r0xa792kwzuv",
-        info: "Sonidos atmosféricos",
-        image: "IMG/ambient.jpg"
+        name: "Pop Latino", 
+        playlistId: "37i9dQZF1DX2wsgTao2vPF", // Playlist de pop latino
+        info: "Pop latino y hits actuales",
+        image: "IMG/pop.jpg"
     },
     { 
-        name: "Bossa Nova", 
-        url: "https://stream.zeno.fm/kbzr8vqrf3quv", // Bossa Nova Radio
-        info: "Ritmos brasileños suaves",
-        image: "IMG/bossa.jpg"
+        name: "Salsa Clásica", 
+        playlistId: "37i9dQZF1DX8EsKyPFhvVz", // Playlist de salsa
+        info: "Los clásicos de la salsa",
+        image: "IMG/salsa.jpg"
     }
 ];
 
 let currentStation = 0;
 let isPlaying = false;
+let spotifyPlayer = null;
+let spotifyToken = null;
+
+// Función para obtener token de Spotify
+function getSpotifyToken() {
+    const scopes = 'streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state';
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scopes)}`;
+    window.location.href = authUrl;
+}
+
+// Extraer token de la URL después del redirect
+function extractTokenFromURL() {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    return params.get('access_token');
+}
+
+// Inicializar Spotify Player
+function initSpotifyPlayer() {
+    const token = extractTokenFromURL() || localStorage.getItem('spotify_token');
+    if (!token) {
+        console.log('No hay token, redirigiendo a autenticación...');
+        return;
+    }
+    
+    spotifyToken = token;
+    localStorage.setItem('spotify_token', token);
+    
+    window.onSpotifyWebPlaybackSDKReady = () => {
+        spotifyPlayer = new Spotify.Player({
+            name: 'Chill Player',
+            getOAuthToken: cb => { cb(token); },
+            volume: 0.5
+        });
+
+        spotifyPlayer.addListener('ready', ({ device_id }) => {
+            console.log('Spotify Player listo con Device ID', device_id);
+        });
+
+        spotifyPlayer.connect();
+    };
+}
 
 const audio = document.getElementById('audioPlayer');
 const playBtn = document.getElementById('playBtn');
@@ -38,7 +84,6 @@ const volumeValue = document.getElementById('volumeValue');
 const stationName = document.getElementById('station-name');
 const songInfo = document.getElementById('song-info');
 const stationBtns = document.querySelectorAll('.station-btn');
-const bars = document.querySelectorAll('.bar');
 
 // Configurar volumen inicial
 audio.volume = 0.7;
@@ -159,19 +204,70 @@ stationBtns.forEach((btn, index) => {
     });
 });
 
-// Animación del visualizador
-function animateVisualizer() {
-    bars.forEach(bar => {
-        const height = Math.random() * 50 + 10;
-        bar.style.height = isPlaying ? height + 'px' : '10px';
+// Función para reproducir playlist de Spotify
+function playSpotifyPlaylist(playlistId) {
+    if (!spotifyPlayer || !spotifyToken) {
+        alert('Por favor conecta con Spotify primero');
+        return;
+    }
+    
+    fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        headers: { 'Authorization': `Bearer ${spotifyToken}` }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Playlist cargada:', data);
+        setStationStatus('playing');
+    })
+    .catch(error => {
+        console.error('Error cargando playlist:', error);
+        setStationStatus('');
     });
 }
 
-setInterval(animateVisualizer, 200);
+// Modificar loadStation para usar Spotify
+function loadStation(index) {
+    currentStation = index;
+    setStationStatus('loading');
+    
+    const stationNameText = document.getElementById('station-name-text');
+    if (stationNameText) {
+        stationNameText.textContent = stations[index].name;
+    }
+    songInfo.textContent = stations[index].info;
 
-// Inicializar la primera estación al cargar la página
+    // Cambiar imagen
+    const stationImage = document.getElementById('station-image');
+    if (stationImage) {
+        stationImage.src = stations[index].image;
+        stationImage.alt = stations[index].name;
+    }
+
+    // Actualizar botones activos
+    stationBtns.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+
+    // Reproducir playlist de Spotify
+    playSpotifyPlaylist(stations[index].playlistId);
+}
+
+// Inicializar la aplicación
 document.addEventListener('DOMContentLoaded', () => {
-    // Cargar estación inicial sin reproducir automáticamente
+    // Configurar botón de login
+    const loginBtn = document.getElementById('loginBtn');
+    const spotifyLogin = document.getElementById('spotify-login');
+    
+    loginBtn.addEventListener('click', getSpotifyToken);
+    
+    // Verificar si ya hay token
+    const token = extractTokenFromURL() || localStorage.getItem('spotify_token');
+    if (token) {
+        spotifyLogin.style.display = 'none';
+        initSpotifyPlayer();
+    }
+    
+    // Cargar estación inicial
     const stationNameText = document.getElementById('station-name-text');
     if (stationNameText) {
         stationNameText.textContent = stations[0].name;
@@ -181,14 +277,12 @@ document.addEventListener('DOMContentLoaded', () => {
         songInfo.textContent = stations[0].info;
     }
     
-    // Configurar imagen inicial
     const stationImage = document.getElementById('station-image');
     if (stationImage) {
         stationImage.src = stations[0].image;
         stationImage.alt = stations[0].name;
     }
     
-    // Marcar primer botón como activo
     if (stationBtns.length > 0) {
         stationBtns[0].classList.add('active');
     }

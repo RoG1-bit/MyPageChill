@@ -7,17 +7,9 @@
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    <div class="background-animation">
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-
-    </div>
-
+    
     <div class="container">
         <h1>Chill Player</h1>
-       
 
         <div class="now-playing">
             <div class="station-name" id="station-name"><span id="station-name-text">Selecciona una estacion</span><span id="station-status" style="margin-left:10px"></span></div>
@@ -28,14 +20,16 @@
             </div>
         </div>
 
-    <div class="visualizer" id="visualizer">
-   
-    </div>
-
     <div class="controls">
         <button id="prevBtn">⏮️</button>
         <button id="playBtn">▶️</button>
         <button id="nextBtn">⏭️</button>
+    </div>
+    
+    <div class="spotify-login" id="spotify-login" style="text-align:center; margin:20px 0;">
+        <button id="loginBtn" style="background:#1DB954; color:white; border:none; padding:12px 24px; border-radius:20px; font-weight:bold; cursor:pointer;">
+            🎵 Conectar con Spotify
+        </button>
     </div>
     
     <div class="volume-control">
@@ -48,11 +42,12 @@
 
     <div class="station">
         <button class="station-btn" data-station="0">🎧  Lofi hip hops</button>
-        <button class="station-btn" data-station="1">🎷 Jazz Suave</button>
+        <button class="station-btn" data-station="1">� Reggaeton 24/7</button>
         <button class="station-btn" data-station="2">🌊 Ambient Chill</button>
-        <button class="station-btn" data-station="3">🌸 Bossa Nova</button>
+        <button class="station-btn" data-station="3">💃 Salsa 24/7</button>
     </div>
     <audio id="audioPlayer"></audio>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script src="JavaScript/script.js"></script>
     </div>
 </body>
