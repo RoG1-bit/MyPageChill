@@ -5,7 +5,13 @@ const radioStations = [
     { id: 3, name: "Ambient Chill", genre: "Ambient", icon: "🌊", url: "https://stream.zeno.fm/0r0xa792kwzuv" },
     { id: 4, name: "Bossa Nova", genre: "Brazilian", icon: "🌸", url: "https://stream.zeno.fm/ey679e8ypa0uv" },
     { id: 5, name: "Smooth Jazz", genre: "Jazz", icon: "🎺", url: "https://stream.zeno.fm/0fcao2magg0uv" },
-    { id: 6, name: "Chillsynth", genre: "Synthwave", icon: "🌆", url: "https://stream.zeno.fm/x8penps1x18uv" }
+    { id: 6, name: "Chillsynth", genre: "Synthwave", icon: "🌆", url: "https://stream.zeno.fm/x8penps1x18uv" },
+    { id: 7, name: "Reggaeton Radio", genre: "Reggaeton", icon: "🎵", url: "https://streams.ilovemusic.de/iloveradio38.mp3" },
+    { id: 8, name: "Electronic Beats", genre: "Electronic", icon: "⚡", url: "https://streams.ilovemusic.de/iloveradio2.mp3" },
+    { id: 9, name: "Salsa Radio", genre: "Salsa", icon: "💃", url: "https://streams.ilovemusic.de/iloveradio23.mp3" },
+    { id: 10, name: "Urban Hits", genre: "Urban", icon: "🎤", url: "https://streams.ilovemusic.de/iloveradio105.mp3" },
+    { id: 11, name: "Latino Mix", genre: "Latino", icon: "🌟", url: "https://streams.ilovemusic.de/iloveradio103.mp3" },
+    { id: 12, name: "Urbano Latino", genre: "Urban Latino", icon: "🎪", url: "https://streams.ilovemusic.de/iloveradio109.mp3" }
 ];
 
 // ESTADO DE LA APP
