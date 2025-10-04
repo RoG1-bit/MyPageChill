@@ -283,16 +283,33 @@ function loadStation(index) {
 
 // Inicializar la aplicación
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Página cargada, inicializando...');
+    
     // Configurar botón de login
     const loginBtn = document.getElementById('loginBtn');
     const spotifyLogin = document.getElementById('spotify-login');
     
-    loginBtn.addEventListener('click', getSpotifyToken);
+    console.log('Botón encontrado:', loginBtn ? 'SÍ' : 'NO');
+    
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function() {
+            console.log('🎵 Botón clickeado!');
+            getSpotifyToken();
+        });
+        
+        // Test simple para ver si el botón funciona
+        loginBtn.addEventListener('click', function() {
+            alert('¡Botón de Spotify clickeado!');
+        });
+    } else {
+        console.error('❌ No se encontró el botón loginBtn');
+    }
     
     // Verificar si ya hay token
     const token = extractTokenFromURL() || localStorage.getItem('spotify_token');
     if (token) {
-        spotifyLogin.style.display = 'none';
+        console.log('Token encontrado, ocultando login');
+        if (spotifyLogin) spotifyLogin.style.display = 'none';
         initSpotifyPlayer();
     }
     
@@ -312,7 +329,10 @@ document.addEventListener('DOMContentLoaded', () => {
         stationImage.alt = stations[0].name;
     }
     
+    const stationBtns = document.querySelectorAll('.station-btn');
     if (stationBtns.length > 0) {
         stationBtns[0].classList.add('active');
     }
+    
+    console.log('✅ Inicialización completada');
 });
