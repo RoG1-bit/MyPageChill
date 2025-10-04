@@ -510,5 +510,135 @@ volumeBar.addEventListener('click', (e) => {
     }
 });
 
+// MENÚ MÓVIL
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+// Alternar sidebar en móviles
+hamburgerBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('mobile-open');
+    sidebarOverlay.classList.toggle('active');
+});
+
+// Cerrar sidebar al hacer click en overlay
+sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-open');
+    sidebarOverlay.classList.remove('active');
+});
+
+// Cerrar sidebar al hacer click en un elemento de navegación (móviles)
+document.querySelectorAll('.nav-item[data-section]').forEach(item => {
+    item.addEventListener('click', () => {
+        // Cerrar sidebar en móviles después de seleccionar
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('mobile-open');
+            sidebarOverlay.classList.remove('active');
+        }
+    });
+});
+
+// Manejar redimensionado de ventana
+window.addEventListener('resize', () => {
+    // Cerrar sidebar si se cambia a desktop
+    if (window.innerWidth > 768) {
+        sidebar.classList.remove('mobile-open');
+        sidebarOverlay.classList.remove('active');
+    }
+});
+
+// MEJORAR INTERACCIONES TÁCTILES
+// Añadir mejor soporte para touch en sliders
+function addTouchSupport(element, callback) {
+    let isDragging = false;
+    
+    // Mouse events
+    element.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        callback(e);
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            callback(e);
+        }
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    // Touch events
+    element.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        callback(touch);
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            const touch = e.touches[0];
+            callback(touch);
+            e.preventDefault();
+        }
+    });
+    
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+}
+
+// Aplicar soporte táctil a controles de volumen y progreso
+const progressBar = document.getElementById('progressBar');
+
+addTouchSupport(volumeBar, (e) => {
+    const rect = volumeBar.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    volumeFill.style.width = percentage + '%';
+    
+    const volume = percentage / 100;
+    radioPlayer.volume = volume;
+    if (ytPlayer && ytPlayer.setVolume) {
+        ytPlayer.setVolume(percentage);
+    }
+});
+
+// VERIFICAR Y CORREGIR VISIBILIDAD DE CONTROLES
+function ensureControlsVisibility() {
+    const criticalElements = [
+        'playBtn', 'prevBtn', 'nextBtn', 'volumeBtn'
+    ];
+    
+    criticalElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            // Forzar estilos de visibilidad
+            element.style.display = 'flex';
+            element.style.visibility = 'visible';
+            element.style.opacity = '1';
+            element.style.position = 'relative';
+            element.style.zIndex = '10';
+        }
+    });
+    
+    // Asegurar contenedores
+    const containers = document.querySelectorAll('.control-buttons, .volume-control, .player-controls');
+    containers.forEach(container => {
+        container.style.display = 'flex';
+        container.style.visibility = 'visible';
+        container.style.opacity = '1';
+    });
+}
+
 // INICIALIZAR
 renderRadios();
+
+// Ejecutar verificación después de cargar
+document.addEventListener('DOMContentLoaded', ensureControlsVisibility);
+window.addEventListener('load', ensureControlsVisibility);
+window.addEventListener('resize', ensureControlsVisibility);
+
+// Verificación adicional después de 1 segundo
+setTimeout(ensureControlsVisibility, 1000);
